@@ -193,6 +193,9 @@
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MetaClasses\CourseMetaData.cs" />
+    <Compile Include="Models\MetaClasses\StaffMetaData.cs" />
+    <Compile Include="Models\MetaClasses\StudentMetaData.cs" />
     <Compile Include="Models\Model1.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
