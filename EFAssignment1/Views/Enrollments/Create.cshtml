@@ -5,12 +5,42 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<script>
+    $(function () {
+        $("#Student_StudentName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Enrollments/GetStudents",
+                    dataType: "json",
+                    type: "POST",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        response($.map(data, function (item) {
+                            return { label: item.Name, value: item.Name, id: item.Id };
+                        }));
+                    }
+                });
+            },
+            minLength: 2,
+            select: function (event, ui) {
+                //debugger;
+                console.log("Selected: " + ui.item.value + " : " + ui.item.id);
+                //console.log('#StudentId'.val());
+                $("#StudentId").val(ui.item.id);
+            }
+        });
+    });
+</script>
+
 <h2>Create</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Enrollment</h4>
         <hr />
@@ -34,6 +64,8 @@
         <div class="form-group">
             @Html.LabelFor(model => model.StudentId, "StudentId", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
+                @*@Html.EditorFor(model => model.Student.StudentName, new { HtmlAttributes = new { @class = "form-control" } })
+                @Html.HiddenFor(model => model.StudentId)*@
                 @Html.DropDownList("StudentId", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.StudentId, "", new { @class = "text-danger" })
             </div>

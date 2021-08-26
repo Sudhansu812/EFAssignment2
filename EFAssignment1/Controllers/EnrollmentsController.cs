@@ -56,9 +56,16 @@ namespace EFAssignment1.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Enrollments.Add(enrollment);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Enrollments.Add(enrollment);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                catch(Exception ex)
+                {
+
+                }
             }
 
             ViewBag.CourseId = new SelectList(db.Courses, "CourseId", "CourseTitle", enrollment.CourseId);
@@ -128,6 +135,16 @@ namespace EFAssignment1.Controllers
             db.Enrollments.Remove(enrollment);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public JsonResult GetStudents(string term)
+        {
+            var students = db.Students.Select(q => new { 
+                Name = q.StudentName,
+                Id = q.StudentId
+            }).Where(q => q.Name.Contains(term));
+            return Json(students,JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)
